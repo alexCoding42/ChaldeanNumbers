@@ -1,10 +1,10 @@
 import { StyleSheet, useColorScheme } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 
 import { Text } from "../../components/Themed";
+import { LinearGradient } from "expo-linear-gradient";
 import Colors from "../../constants/Colors";
 
-export default function DateScreen() {
+export default function NameScreen() {
   const colorScheme = useColorScheme();
   return (
     <LinearGradient
@@ -13,7 +13,7 @@ export default function DateScreen() {
       colors={Colors[colorScheme ?? "light"].background}
       style={styles.container}
     >
-      <Text style={styles.title}>Date</Text>
+      <Text style={styles.title}>Name</Text>
     </LinearGradient>
   );
 }
