@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Text, View } from "components/Themed";
 import Colors from "constants/Colors";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
@@ -30,11 +30,11 @@ export default function ProfileScreen() {
             ]}
           >
             <Text style={styles.infoBoxText}>0</Text>
-            <Text style={styles.infoBoxText}>Name favorites</Text>
+            <Text style={styles.infoBoxText}>Number of names favorite</Text>
           </View>
           <View style={styles.infoBox}>
             <Text style={styles.infoBoxText}>0</Text>
-            <Text style={styles.infoBoxText}>Date favorites</Text>
+            <Text style={styles.infoBoxText}>Number of dates favorite</Text>
           </View>
         </View>
 
@@ -42,26 +42,15 @@ export default function ProfileScreen() {
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
               <FontAwesome name="heart-o" size={24} color={Colors.light.text} />
-              <Text style={styles.menuItemText}>Your Favorites</Text>
+              <Text style={styles.menuItemText}>List of your Favorites</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
-              <MaterialIcons
-                name="policy"
-                size={24}
-                color={Colors.light.text}
-              />
+              <Ionicons name="hammer" size={24} color={Colors.light.text} />
               <Link href="/profile/privacy-policy" style={styles.menuItemText}>
                 Privacy Policy
               </Link>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
-            <View style={styles.menuItem}>
-              <FontAwesome name="legal" size={24} color={Colors.light.text} />
-
-              <Text style={styles.menuItemText}>Legal Information</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
