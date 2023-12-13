@@ -1,10 +1,24 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { NhostClient, NhostProvider } from "@nhost/react";
+import { NhostApolloProvider } from "@nhost/react-apollo";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import Storage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
+import Constants from "expo-constants";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
+
+const NHOST_SUBDOMAIN = Constants?.expoConfig?.extra?.nhostSubdomain;
+const NHOST_REGION = Constants?.expoConfig?.extra?.nhostRegion;
+
+const nhost = new NhostClient({
+  subdomain: NHOST_SUBDOMAIN,
+  region: NHOST_REGION,
+  clientStorageType: "react-native",
+  clientStorage: Storage,
+});
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -47,13 +61,17 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    // <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-    <ThemeProvider value={DefaultTheme}>
-      <StatusBar style="light" />
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-      </Stack>
-    </ThemeProvider>
+    <NhostProvider nhost={nhost}>
+      <NhostApolloProvider nhost={nhost}>
+        {/* <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}> */}
+        <ThemeProvider value={DefaultTheme}>
+          <StatusBar style="light" />
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+          </Stack>
+        </ThemeProvider>
+      </NhostApolloProvider>
+    </NhostProvider>
   );
 }

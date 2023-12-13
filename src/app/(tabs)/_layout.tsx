@@ -3,6 +3,7 @@ import { Tabs } from "expo-router";
 import { useColorScheme } from "react-native";
 
 import Colors from "constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -43,8 +44,22 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="number-list"
+        name="number-list/index"
         options={{
+          headerShown: true,
+          headerBackground: () => (
+            <LinearGradient
+              colors={Colors.light.background}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={{ flex: 1 }}
+            />
+          ),
+          headerTitleStyle: {
+            color: Colors.light.text,
+          },
+          headerTintColor: Colors.light.text,
+          headerTitle: "List of chaldean numbers",
           title: "List",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="list-ol" color={color} />

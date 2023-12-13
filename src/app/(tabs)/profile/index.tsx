@@ -10,7 +10,7 @@ import { Spacings } from "constants/Layouts";
 export default function ProfileScreen() {
   return (
     <LinearGradientBackground>
-      <SafeAreaView>
+      <SafeAreaView style={{ paddingTop: 14 }}>
         <View style={styles.userInfoSection}>
           <Text style={styles.username}>Username here</Text>
           <View style={styles.row}>
@@ -19,7 +19,7 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        <View style={styles.infoBoxWrapper}>
+        {/* <View style={styles.infoBoxWrapper}>
           <View
             style={[
               styles.infoBox,
@@ -36,7 +36,7 @@ export default function ProfileScreen() {
             <Text style={styles.infoBoxText}>0</Text>
             <Text style={styles.infoBoxText}>Number of dates favorite</Text>
           </View>
-        </View>
+        </View> */}
 
         <View style={styles.menuWrapper}>
           <TouchableOpacity onPress={() => {}}>
@@ -47,12 +47,19 @@ export default function ProfileScreen() {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
+              <FontAwesome name="book" size={24} color={Colors.light.text} />
+              <Text style={styles.menuItemText}>Source</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}}>
+            <View style={styles.menuItem}>
               <Ionicons name="hammer" size={24} color={Colors.light.text} />
               <Link href="/profile/privacy-policy" style={styles.menuItemText}>
                 Privacy Policy
               </Link>
             </View>
           </TouchableOpacity>
+
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
               <MaterialIcons
