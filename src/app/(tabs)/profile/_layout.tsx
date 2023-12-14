@@ -3,7 +3,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Stack } from "expo-router";
 
 const defaultOptions = {
-  title: "Privacy Policy",
   headerBackground: () => (
     <LinearGradient
       colors={Colors.light.background}
@@ -20,9 +19,17 @@ const defaultOptions = {
 
 export default function ProfileStackLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="privacy-policy" options={defaultOptions} />
+    <Stack screenOptions={defaultOptions}>
+      <Stack.Screen name="index" options={{ headerTitle: "Profile" }} />
+      <Stack.Screen
+        name="privacy-policy"
+        options={{ headerTitle: "Privacy Policy" }}
+      />
+      <Stack.Screen name="source" options={{ headerTitle: "Source" }} />
+      <Stack.Screen
+        name="favorites"
+        options={{ headerTitle: "Your favorites" }}
+      />
     </Stack>
   );
 }

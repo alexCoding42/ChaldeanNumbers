@@ -5,9 +5,8 @@ import { IChaldeanNumber } from "types";
 import CardNumber from "components/CardNumber";
 import { getNumberList } from "./queries";
 import LoadingSpinner from "components/atoms/LoadingSpinner";
-import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function NumberListScreen() {
+export default function NumbersScreen() {
   const { data, loading, error } = useQuery(getNumberList);
 
   if (error) {

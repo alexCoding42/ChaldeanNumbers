@@ -18,9 +18,21 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
+        headerBackground: () => (
+          <LinearGradient
+            colors={Colors.light.background}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={{ flex: 1 }}
+          />
+        ),
+        headerTitleStyle: {
+          color: Colors.light.text,
+        },
+        headerTintColor: Colors.light.text,
         // tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         tabBarActiveTintColor: Colors.light.tabIconSelected,
-        headerShown: false,
+
         tabBarStyle: {
           backgroundColor: "#151146",
           elevation: 0.5,
@@ -30,6 +42,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
+          headerTitle: "Calculate a date",
           title: "Date",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="calendar" color={color} />
@@ -39,28 +52,16 @@ export default function TabLayout() {
       <Tabs.Screen
         name="name"
         options={{
+          headerTitle: "Calculate a name",
           title: "Name",
           tabBarIcon: ({ color }) => <TabBarIcon name="pencil" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="number-list/index"
+        name="numbers"
         options={{
-          headerShown: true,
-          headerBackground: () => (
-            <LinearGradient
-              colors={Colors.light.background}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{ flex: 1 }}
-            />
-          ),
-          headerTitleStyle: {
-            color: Colors.light.text,
-          },
-          headerTintColor: Colors.light.text,
           headerTitle: "List of chaldean numbers",
-          title: "List",
+          title: "Numbers",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="list-ol" color={color} />
           ),
@@ -69,6 +70,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
+          headerShown: false,
           title: "Profile",
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}

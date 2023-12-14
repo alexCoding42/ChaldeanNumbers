@@ -10,7 +10,7 @@ import { Spacings } from "constants/Layouts";
 export default function ProfileScreen() {
   return (
     <LinearGradientBackground>
-      <SafeAreaView style={{ paddingTop: 14 }}>
+      <View style={styles.container}>
         <View style={styles.userInfoSection}>
           <Text style={styles.username}>Username here</Text>
           <View style={styles.row}>
@@ -42,13 +42,17 @@ export default function ProfileScreen() {
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
               <FontAwesome name="heart-o" size={24} color={Colors.light.text} />
-              <Text style={styles.menuItemText}>List of your Favorites</Text>
+              <Link href="/profile/favorites" style={styles.menuItemText}>
+                List of favorites
+              </Link>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
               <FontAwesome name="book" size={24} color={Colors.light.text} />
-              <Text style={styles.menuItemText}>Source</Text>
+              <Link href="/profile/source" style={styles.menuItemText}>
+                Source
+              </Link>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
@@ -77,12 +81,15 @@ export default function ProfileScreen() {
             <Text style={styles.deleteText}>Delete your account</Text>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </View>
     </LinearGradientBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    paddingTop: 12,
+  },
   userInfoSection: {
     paddingHorizontal: Spacings.SM,
     paddingBottom: Spacings.M,
