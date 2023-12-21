@@ -12,7 +12,6 @@ import LinearGradientBackground from "components/atoms/LinearGradientBackground"
 import { Text, View } from "components/Themed";
 import { MaterialIcons } from "@expo/vector-icons";
 import { styles } from "./styles";
-import Colors from "constants/Colors";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { ADD_FAVORITE, DELETE_FAVORITE, GET_FAVORITES } from "graphql/queries";
 import { CHALDEAN_NUMBERS } from "constants/Numbers";
@@ -21,6 +20,7 @@ import { useAuthenticationStatus, useUserData } from "@nhost/react";
 import { IFavorite, IToast } from "types";
 import LinearGradientButton from "components/atoms/LinearGradientButton";
 import Toast from "components/atoms/Toast";
+import { Colors } from "constants/Colors";
 
 export default function NameScreen() {
   const validName = "^[a-zA-Z0-9\\s]+$";
@@ -57,7 +57,7 @@ export default function NameScreen() {
       <MaterialIcons
         name={isNameFavorite ? "favorite" : "favorite-outline"}
         size={18}
-        color={Colors.light.delete}
+        color={Colors.red}
       />
     );
   }, [isNameFavorite]);
@@ -131,7 +131,7 @@ export default function NameScreen() {
         {
           type: "danger",
           message: "Favorite removed",
-          color: Colors.light.delete,
+          color: Colors.red,
         },
       ]);
     } else {
@@ -223,18 +223,14 @@ export default function NameScreen() {
                 testID="nameTextInput"
                 ref={inputDateRef}
                 placeholder="Ex: Bernard Hackwell"
-                placeholderTextColor={Colors.light.tabIconDefault}
+                placeholderTextColor={Colors.placeholder}
                 autoCapitalize="none"
                 style={styles.input}
                 value={inputName}
                 onChangeText={(value) => setInputName(value)}
               />
               <Pressable style={styles.clearIcon} onPress={clearField}>
-                <MaterialIcons
-                  color={Colors.light.text}
-                  name="clear"
-                  size={20}
-                />
+                <MaterialIcons color={Colors.text} name="clear" size={20} />
               </Pressable>
             </View>
             <LinearGradientButton

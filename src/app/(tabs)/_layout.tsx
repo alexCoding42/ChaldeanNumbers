@@ -1,9 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
-import { useColorScheme } from "react-native";
-
-import Colors from "constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
+import { Colors } from "constants/Colors";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -13,28 +11,25 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
         headerBackground: () => (
           <LinearGradient
-            colors={Colors.light.background}
+            colors={Colors.background}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={{ flex: 1 }}
           />
         ),
         headerTitleStyle: {
-          color: Colors.light.text,
+          color: Colors.text,
         },
-        headerTintColor: Colors.light.text,
-        // tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        tabBarActiveTintColor: Colors.light.tabIconSelected,
+        headerTintColor: Colors.text,
+        tabBarActiveTintColor: Colors.tabIconSelected,
 
         tabBarStyle: {
-          backgroundColor: "#151146",
+          backgroundColor: Colors.purple.dark,
           elevation: 0.5,
         },
       }}

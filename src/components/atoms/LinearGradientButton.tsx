@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Borders } from "constants/Layouts";
-import Colors, { Gradients } from "constants/Colors";
+import { Colors, Gradients } from "constants/Colors";
 
 type LinearGradientButtonProps = {
   onPress: () => void;
@@ -38,7 +38,7 @@ export default function LinearGradientButton({
         style={styles.linearGradientBtn}
       >
         {isLoading ? (
-          <ActivityIndicator color={Colors.light.text} />
+          <ActivityIndicator color={Colors.text} />
         ) : (
           <Text style={styles.btnText}>{buttonText}</Text>
         )}
@@ -56,6 +56,6 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontWeight: "bold",
-    color: Colors.light.text,
+    color: Colors.text,
   },
 });

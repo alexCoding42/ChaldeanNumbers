@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 import { Spacings } from "constants/Layouts";
-import Colors from "constants/Colors";
+import { Colors } from "constants/Colors";
 import { IChaldeanNumber } from "types";
 import { router } from "expo-router";
 
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     margin: Spacings.XS,
     width: width / 2 - Spacings.SM,
     height: 80,
-    backgroundColor: Colors.light.text,
+    backgroundColor: Colors.text,
     padding: Spacings.XXS,
     borderRadius: 7,
     justifyContent: "center",

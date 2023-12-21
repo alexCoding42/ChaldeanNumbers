@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet } from "react-native";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import { Text, View } from "components/Themed";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
-import Colors from "constants/Colors";
+import { Colors } from "constants/Colors";
 import { Spacings } from "constants/Layouts";
 import { useQuery } from "@apollo/client";
 import { getNumberDetailsById } from "./queries";
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: "bold",
-    color: Colors.light.text,
+    color: Colors.text,
     textAlign: "center",
   },
   sectionContainer: {
@@ -120,17 +120,17 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    color: Colors.light.text,
+    color: Colors.text,
     fontWeight: "700",
     paddingBottom: Spacings.XS,
   },
   sectionContent: {
     fontSize: 16,
-    color: Colors.light.text,
+    color: Colors.text,
   },
   sectionPhraseTitle: {
     fontSize: 16,
-    color: Colors.light.text,
+    color: Colors.text,
     fontWeight: "600",
     fontStyle: "italic",
     paddingBottom: Spacings.XS,

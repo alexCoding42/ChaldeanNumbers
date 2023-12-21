@@ -1,11 +1,11 @@
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import React from "react";
-import Colors from "constants/Colors";
+import { Colors } from "constants/Colors";
 
 export default function LoadingSpinner() {
   return (
     <View style={styles.loadingView}>
-      <ActivityIndicator size="large" color={Colors.light.text} />
+      <ActivityIndicator size="large" color={Colors.text} />
     </View>
   );
 }

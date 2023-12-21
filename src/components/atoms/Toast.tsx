@@ -1,6 +1,6 @@
 import { Animated, Text, View } from "react-native";
 import { useEffect, useRef } from "react";
-import Colors from "constants/Colors";
+import { Colors } from "constants/Colors";
 
 type ToasterProps = {
   message: string;

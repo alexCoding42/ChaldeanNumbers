@@ -3,7 +3,7 @@ import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Text, View } from "components/Themed";
-import Colors from "constants/Colors";
+import { Colors } from "constants/Colors";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import { Spacings } from "constants/Layouts";
 
@@ -14,7 +14,7 @@ export default function ProfileScreen() {
         <View style={styles.userInfoSection}>
           <Text style={styles.username}>Username here</Text>
           <View style={styles.row}>
-            <MaterialIcons name="email" size={20} color={Colors.light.text} />
+            <MaterialIcons name="email" size={20} color={Colors.text} />
             <Text style={styles.sectionText}>User email here</Text>
           </View>
         </View>
@@ -41,7 +41,7 @@ export default function ProfileScreen() {
         <View style={styles.menuWrapper}>
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
-              <FontAwesome name="heart-o" size={24} color={Colors.light.text} />
+              <FontAwesome name="heart-o" size={24} color={Colors.text} />
               <Link href="/profile/favorites" style={styles.menuItemText}>
                 List of favorites
               </Link>
@@ -49,7 +49,7 @@ export default function ProfileScreen() {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
-              <FontAwesome name="book" size={24} color={Colors.light.text} />
+              <FontAwesome name="book" size={24} color={Colors.text} />
               <Link href="/profile/source" style={styles.menuItemText}>
                 Source
               </Link>
@@ -57,7 +57,7 @@ export default function ProfileScreen() {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
-              <Ionicons name="hammer" size={24} color={Colors.light.text} />
+              <Ionicons name="hammer" size={24} color={Colors.text} />
               <Link href="/profile/privacy-policy" style={styles.menuItemText}>
                 Privacy Policy
               </Link>
@@ -66,11 +66,7 @@ export default function ProfileScreen() {
 
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
-              <MaterialIcons
-                name="logout"
-                size={24}
-                color={Colors.light.text}
-              />
+              <MaterialIcons name="logout" size={24} color={Colors.text} />
               <Text style={styles.menuItemText}>Logout</Text>
             </View>
           </TouchableOpacity>
@@ -97,7 +93,7 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 24,
     fontWeight: "bold",
-    color: Colors.light.text,
+    color: Colors.text,
     marginBottom: Spacings.XS,
   },
   row: {
@@ -105,13 +101,13 @@ const styles = StyleSheet.create({
     marginBottom: Spacings.XS,
   },
   sectionText: {
-    color: Colors.light.text,
+    color: Colors.text,
     marginLeft: Spacings.XS,
   },
   infoBoxWrapper: {
-    borderBottomColor: Colors.light.text,
+    borderBottomColor: Colors.text,
     borderBottomWidth: 1,
-    borderTopColor: Colors.light.text,
+    borderTopColor: Colors.text,
     borderTopWidth: 1,
     flexDirection: "row",
     height: 100,
@@ -122,7 +118,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   infoBoxText: {
-    color: Colors.light.text,
+    color: Colors.text,
   },
   menuWrapper: {
     marginTop: 10,
@@ -133,7 +129,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacings.SM,
   },
   menuItemText: {
-    color: Colors.light.text,
+    color: Colors.text,
     marginLeft: Spacings.SM,
     fontWeight: "600",
     fontSize: 16,
@@ -143,7 +139,7 @@ const styles = StyleSheet.create({
     marginTop: Spacings.M,
   },
   deleteText: {
-    color: Colors.light.delete,
+    color: Colors.red,
     textAlign: "center",
     opacity: 0.8,
   },

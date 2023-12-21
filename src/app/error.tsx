@@ -1,5 +1,5 @@
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
-import Colors from "constants/Colors";
+import { Colors } from "constants/Colors";
 import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { StyleSheet, TouchableOpacity, Text, View } from "react-native";
@@ -32,12 +32,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    color: Colors.light.text,
+    color: Colors.text,
   },
   message: {
     fontSize: 16,
     fontWeight: "500",
-    color: Colors.light.text,
+    color: Colors.text,
   },
   link: {
     marginTop: 15,
@@ -45,6 +45,6 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 14,
-    color: "#2e78b7",
+    color: Colors.link,
   },
 });

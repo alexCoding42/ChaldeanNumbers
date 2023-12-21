@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import Colors from "constants/Colors";
+import { Colors } from "constants/Colors";
 
 type LinearGradientBackgroundProps = {
   colors?: string[];
@@ -8,7 +8,7 @@ type LinearGradientBackgroundProps = {
 };
 
 export default function LinearGradientBackground({
-  colors = Colors.light.background,
+  colors = Colors.background,
   children,
 }: LinearGradientBackgroundProps) {
   return (
