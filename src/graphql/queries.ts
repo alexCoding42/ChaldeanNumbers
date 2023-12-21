@@ -1,5 +1,15 @@
 import { gql } from "@apollo/client";
 
+export const DELETE_USER = gql`
+  mutation DeleteUser($id: uuid!) {
+    deleteUser(id: $id) {
+      id
+      displayName
+      email
+    }
+  }
+`;
+
 export const GET_FAVORITES = gql`
   query ($userId: uuid! = "9e094feb-6c38-4742-a723-9e2d2b61405e") {
     favorites(where: { userId: { _eq: $userId } }) {

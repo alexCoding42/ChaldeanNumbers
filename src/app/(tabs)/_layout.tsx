@@ -2,6 +2,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "constants/Colors";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -49,7 +50,13 @@ export default function TabLayout() {
         options={{
           headerTitle: "Calculate a name",
           title: "Name",
-          tabBarIcon: ({ color }) => <TabBarIcon name="pencil" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="format-letter-case"
+              color={color}
+              size={28}
+            />
+          ),
         }}
       />
       <Tabs.Screen

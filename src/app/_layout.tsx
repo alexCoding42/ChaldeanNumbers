@@ -8,7 +8,7 @@ import Constants from "expo-constants";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
+import DefaultHeaderOptions from "constants/DefaultHeaderOptions";
 
 const NHOST_SUBDOMAIN = Constants?.expoConfig?.extra?.nhostSubdomain;
 const NHOST_REGION = Constants?.expoConfig?.extra?.nhostRegion;
@@ -58,18 +58,26 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
   return (
     <NhostProvider nhost={nhost}>
       <NhostApolloProvider nhost={nhost}>
-        {/* <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}> */}
         <ThemeProvider value={DefaultTheme}>
           <StatusBar style="light" />
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="modal" options={{ presentation: "modal" }} />
             <Stack.Screen name="error" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="sign-in"
+              options={{
+                ...DefaultHeaderOptions,
+                headerTitle: "Sign In",
+              }}
+            />
+            <Stack.Screen
+              name="sign-up"
+              options={{ ...DefaultHeaderOptions, headerTitle: "Sign Up" }}
+            />
           </Stack>
         </ThemeProvider>
       </NhostApolloProvider>

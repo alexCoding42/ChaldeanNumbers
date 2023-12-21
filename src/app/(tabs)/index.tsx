@@ -1,4 +1,4 @@
-import { StyleSheet, useColorScheme } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { Text } from "components/Themed";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
