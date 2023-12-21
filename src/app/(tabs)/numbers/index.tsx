@@ -1,5 +1,6 @@
 import { FlatList } from "react-native";
 import { useQuery } from "@apollo/client";
+import { router } from "expo-router";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import { IChaldeanNumber } from "types";
 import CardNumber from "components/CardNumber";
@@ -10,11 +11,13 @@ export default function NumbersScreen() {
   const { data, loading, error } = useQuery(getAllNumbers);
 
   if (error) {
-    console.warn(error);
-    // navigation.navigate("Error", {
-    //   errorTitle: "Cannot get data from database",
-    //   errorMessage: "Try again or contact the support.",
-    // });
+    router.replace({
+      pathname: `/error`,
+      params: {
+        errorTitle: "Cannot get data from database",
+        errorMessage: "Try again or contact the support.",
+      },
+    });
     return null;
   }
 

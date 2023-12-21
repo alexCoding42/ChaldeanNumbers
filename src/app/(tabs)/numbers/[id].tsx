@@ -1,6 +1,6 @@
 import React from "react";
 import { ScrollView, StyleSheet } from "react-native";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import { Text, View } from "components/Themed";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import Colors from "constants/Colors";
@@ -21,7 +21,13 @@ export default function NumberDetailsScreen() {
   });
 
   if (error) {
-    console.warn(error);
+    router.replace({
+      pathname: `/error`,
+      params: {
+        errorTitle: "Cannot get data from database",
+        errorMessage: "Try again or contact the support.",
+      },
+    });
     return null;
   }
 
