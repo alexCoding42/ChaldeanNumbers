@@ -50,7 +50,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="name"
+        name="name/index"
         options={{
           headerTitle: "Calculate a name",
           title: "Name",
