@@ -11,7 +11,7 @@ export const DELETE_USER = gql`
 `;
 
 export const GET_FAVORITES = gql`
-  query ($userId: uuid! = "9e094feb-6c38-4742-a723-9e2d2b61405e") {
+  query ($userId: uuid!) {
     favorites(where: { userId: { _eq: $userId } }) {
       id
       type
@@ -22,11 +22,7 @@ export const GET_FAVORITES = gql`
 `;
 
 export const ADD_FAVORITE = gql`
-  mutation (
-    $type: String!
-    $value: String!
-    $userId: uuid! = "9e094feb-6c38-4742-a723-9e2d2b61405e"
-  ) {
+  mutation ($type: String!, $value: String!, $userId: uuid!) {
     insert_favorites(
       objects: [{ type: $type, value: $value, userId: $userId }]
     ) {

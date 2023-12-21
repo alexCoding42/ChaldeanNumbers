@@ -12,7 +12,7 @@ export default function ErrorScreen() {
         <Text style={styles.title}>{errorTitle}</Text>
         <Text style={styles.message}>{errorMessage}</Text>
         <TouchableOpacity
-          onPress={() => router.replace("/(tabs)/name")}
+          onPress={() => router.replace("/(tabs)")}
           style={styles.link}
         >
           <Text style={styles.linkText}>Go back to home screen!</Text>

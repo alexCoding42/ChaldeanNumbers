@@ -38,16 +38,6 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          headerTitle: "Calculate a date",
-          title: "Date",
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="calendar" color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="name/index"
-        options={{
           headerTitle: "Calculate a name",
           title: "Name",
           tabBarIcon: ({ color }) => (
@@ -56,6 +46,16 @@ export default function TabLayout() {
               color={color}
               size={28}
             />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="date"
+        options={{
+          headerTitle: "Calculate a date",
+          title: "Date",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="calendar" color={color} />
           ),
         }}
       />

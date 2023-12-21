@@ -13,8 +13,8 @@ const NotAuthenticatedScreen = () => {
     <LinearGradientBackground>
       <View style={styles.container}>
         <Text style={styles.title}>
-          Login into your account or create a new account to retrieve your
-          favorites and access to your settings
+          Login or create a new account to save your favorites and access your
+          profile.
         </Text>
         <LinearGradientButton
           style={styles.button}
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   title: {
     color: Colors.text,
     fontSize: 18,
-    textAlign: "left",
+    textAlign: "center",
   },
   button: {
     marginTop: Spacings.SM,

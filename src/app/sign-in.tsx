@@ -55,7 +55,7 @@ export default function SignInScreen() {
       } else if (res.isError) {
         throw new Error(res?.error?.message);
       } else if (res.isSuccess) {
-        router.replace("/(tabs)/name");
+        router.replace("/(tabs)");
       }
     } catch (error) {
       Alert.alert("Error", (error as Error).message);
