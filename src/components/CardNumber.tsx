@@ -18,12 +18,14 @@ export default function CardNumber({ item }: { item: IChaldeanNumber }) {
     <TouchableOpacity
       activeOpacity={0.8}
       key={item.id}
-      onPress={() => {
-        // router.replace({
-        //   pathname: `/number-list/details/${item.id}`,
-        //   params: { item: item },
-        // });
-      }}
+      onPress={() =>
+        router.push({
+          pathname: `/numbers/${item.id}`,
+          params: {
+            id: item.id,
+          },
+        })
+      }
     >
       <View style={styles.card}>
         <Text style={styles.cardTextNumericValue}>{item.chaldean}</Text>

@@ -3,11 +3,11 @@ import { useQuery } from "@apollo/client";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import { IChaldeanNumber } from "types";
 import CardNumber from "components/CardNumber";
-import { getNumberList } from "./queries";
+import { getAllNumbers } from "./queries";
 import LoadingSpinner from "components/atoms/LoadingSpinner";
 
 export default function NumbersScreen() {
-  const { data, loading, error } = useQuery(getNumberList);
+  const { data, loading, error } = useQuery(getAllNumbers);
 
   if (error) {
     console.warn(error);

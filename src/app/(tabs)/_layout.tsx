@@ -60,7 +60,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="numbers"
         options={{
-          headerTitle: "List of chaldean numbers",
+          headerShown: false,
           title: "Numbers",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="list-ol" color={color} />
