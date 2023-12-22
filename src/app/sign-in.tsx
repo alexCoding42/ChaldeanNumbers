@@ -143,7 +143,8 @@ export default function SignInScreen() {
               />
               <TouchableOpacity onPress={() => router.push("/sign-up")}>
                 <Text style={styles.signUpText}>
-                  Don't have an account yet? Sign Up now
+                  Don't have an account yet?{" "}
+                  <Text style={styles.signUpTextColored}>Sign Up</Text> now
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => router.push("/forgot-password")}>
@@ -208,6 +209,9 @@ const styles = StyleSheet.create({
     color: Colors.text,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  signUpTextColored: {
+    color: Colors.yellow.dark,
   },
   forgotPasswordText: {
     marginTop: Spacings.SM,
