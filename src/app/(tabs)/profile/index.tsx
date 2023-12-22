@@ -6,17 +6,18 @@ import { Colors } from "constants/Colors";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import { Spacings } from "constants/Layouts";
 import { useSignOut, useUserData } from "@nhost/react";
-import { useMutation } from "@apollo/client";
+import { useApolloClient, useMutation } from "@apollo/client";
 import { DELETE_USER } from "graphql/queries";
 import LoadingSpinner from "components/atoms/LoadingSpinner";
 
 export default function ProfileScreen() {
   const user = useUserData();
   const { signOut } = useSignOut();
+  const client = useApolloClient();
 
   const [deleteUser] = useMutation(DELETE_USER, {
     variables: {
-      id: user?.id,
+      id: user?.id || "",
     },
   });
 
@@ -55,7 +56,8 @@ export default function ProfileScreen() {
 
   const logout = () => {
     signOut();
-    router.replace("/profile/not-authenticated");
+    client.resetStore();
+    router.replace("/");
   };
 
   return (

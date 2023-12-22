@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useState } from "react";
+import React, { createRef, useCallback, useEffect, useState } from "react";
 import {
   Alert,
   Keyboard,
@@ -12,7 +12,7 @@ import {
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import { Text, View } from "components/Themed";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { ADD_FAVORITE, DELETE_FAVORITE, GET_FAVORITES } from "graphql/queries";
 import { CHALDEAN_NUMBERS } from "constants/Numbers";
 import { getArrayOfNumbersFromSplittedName, getTotal } from "utils/computation";
@@ -43,8 +43,9 @@ export default function NameScreen() {
   const { data: favoritesData, loading: isfetchingFavorites } = useQuery(
     GET_FAVORITES,
     {
+      skip: !isAuthenticated,
       variables: {
-        userId: user?.id,
+        userId: isAuthenticated ? user?.id : "",
       },
       fetchPolicy: "network-only",
     }
@@ -52,6 +53,22 @@ export default function NameScreen() {
 
   const [insertFavorite] = useMutation(ADD_FAVORITE);
   const [removeFavorite] = useMutation(DELETE_FAVORITE);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (isAuthenticated) {
+          const favoriteData = await checkIfNameIsFavorite();
+          setIsNameFavorite(favoriteData?.isNameFavorite);
+          setNameFavoriteId(favoriteData?.nameFavoriteId);
+        }
+      } catch (error) {
+        console.warn("Error", error);
+      }
+    };
+
+    fetchData();
+  }, [isAuthenticated, inputName]);
 
   const clearField = () => {
     inputDateRef?.current?.clear();
@@ -257,7 +274,7 @@ export default function NameScreen() {
                   <Text style={styles.resultText}>{chaldeanResult}</Text>
                 </View>
               )}
-              {isAuthenticated && chaldeanResult && (
+              {isAuthenticated && chaldeanResult && user && (
                 <View style={styles.resultSection}>
                   <Text style={styles.resultLabel}>
                     {isNameFavorite
