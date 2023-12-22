@@ -39,9 +39,17 @@ export default function FavoritesScreen() {
     </View>
   );
 
+  const pluralizeType = (category: string): string => {
+    const singularType = category.endsWith("s")
+      ? category.slice(0, -1)
+      : category;
+    return singularType.toLowerCase();
+  };
+
   const renderCategory = (category: string) => {
+    const normalizedCategory = pluralizeType(category);
     const filteredFavorites = data?.favorites.filter(
-      (fav: IFavorite) => fav.type === category.toLowerCase()
+      (fav: IFavorite) => fav.type === normalizedCategory
     );
 
     return (
