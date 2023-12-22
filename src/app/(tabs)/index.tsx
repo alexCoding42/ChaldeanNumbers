@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { createRef, useCallback, useState } from "react";
 import {
   Alert,
   Keyboard,
@@ -12,7 +12,7 @@ import {
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import { Text, View } from "components/Themed";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { ADD_FAVORITE, DELETE_FAVORITE, GET_FAVORITES } from "graphql/queries";
 import { CHALDEAN_NUMBERS } from "constants/Numbers";
 import { getArrayOfNumbersFromSplittedName, getTotal } from "utils/computation";
@@ -25,7 +25,7 @@ import { Borders, Spacings } from "constants/Layouts";
 
 export default function NameScreen() {
   const validName = "^[a-zA-Z0-9\\s]+$";
-  const inputDateRef = React.createRef<TextInput>();
+  const inputDateRef = createRef<TextInput>();
 
   const { isAuthenticated } = useAuthenticationStatus();
   const user = useUserData();
@@ -40,7 +40,7 @@ export default function NameScreen() {
   const [nameFavoriteId, setNameFavoriteId] = useState("");
   const [toasts, setToasts] = useState<IToast[]>([]);
 
-  const [getFavorites, { loading: isfetchingFavorites }] = useLazyQuery(
+  const { data: favoritesData, loading: isfetchingFavorites } = useQuery(
     GET_FAVORITES,
     {
       variables: {
@@ -52,16 +52,6 @@ export default function NameScreen() {
 
   const [insertFavorite] = useMutation(ADD_FAVORITE);
   const [removeFavorite] = useMutation(DELETE_FAVORITE);
-
-  const renderFavoriteIcon = useCallback(() => {
-    return (
-      <MaterialIcons
-        name={isNameFavorite ? "favorite" : "favorite-outline"}
-        size={24}
-        color={Colors.red}
-      />
-    );
-  }, [isNameFavorite]);
 
   const clearField = () => {
     inputDateRef?.current?.clear();
@@ -85,6 +75,16 @@ export default function NameScreen() {
     Keyboard.dismiss();
     setIsButtonLoading(true);
 
+    try {
+      if (isAuthenticated) {
+        const favoriteData = await checkIfNameIsFavorite();
+        setIsNameFavorite(favoriteData?.isNameFavorite);
+        setNameFavoriteId(favoriteData?.nameFavoriteId);
+      }
+    } catch (error) {
+      console.warn("Error", error);
+    }
+
     setTimeout(() => {
       const arrayOfNumbersFromName = splitNameAndReturnArrayOfNumbers(name);
       const firstSubNum = getTotalOfArrayNumbers(arrayOfNumbersFromName);
@@ -102,12 +102,6 @@ export default function NameScreen() {
 
       setIsButtonLoading(false);
     }, 1000);
-
-    if (user) {
-      const favoriteData = await checkIfNameIsFavorite();
-      setIsNameFavorite(favoriteData?.isNameFavorite);
-      setNameFavoriteId(favoriteData?.nameFavoriteId);
-    }
   };
 
   const getTotalOfArrayNumbers = (numbers: number[]) => {
@@ -180,24 +174,18 @@ export default function NameScreen() {
     }
   };
 
-  const checkIfNameIsFavorite = async () => {
+  const checkIfNameIsFavorite = () => {
     try {
       const name = inputName.trim().toLowerCase();
-      const { data } = await getFavorites();
+      const favorites = favoritesData?.favorites || [];
 
-      if (isfetchingFavorites) {
-        return { isNameFavorite: false, nameFavoriteId: "" };
-      } else if (data) {
-        const favorite = data.favorites.find(
-          (fav: IFavorite) => fav.value === name
-        );
-        return {
-          isNameFavorite: favorite?.id != null,
-          nameFavoriteId: favorite?.id ?? "",
-        };
-      }
+      const favorite = favorites.find((fav: IFavorite) => fav.value === name);
+
+      return {
+        isNameFavorite: favorite?.id != null,
+        nameFavoriteId: favorite?.id || "",
+      };
     } catch (error) {
-      console.error(error);
       return { isNameFavorite: false, nameFavoriteId: "" };
     }
   };
@@ -216,6 +204,16 @@ export default function NameScreen() {
       />
     ));
   };
+
+  const renderFavoriteIcon = useCallback(() => {
+    return (
+      <MaterialIcons
+        name={isNameFavorite ? "favorite" : "favorite-outline"}
+        size={24}
+        color={Colors.red}
+      />
+    );
+  }, [isNameFavorite]);
 
   return (
     <LinearGradientBackground>
@@ -247,19 +245,19 @@ export default function NameScreen() {
             />
 
             <View style={styles.resultContainer}>
-              {firstSubNumber ? (
+              {firstSubNumber && (
                 <View style={styles.resultSection}>
                   <Text style={styles.resultLabel}>First Sub Number:</Text>
                   <Text style={styles.resultText}>{firstSubNumber}</Text>
                 </View>
-              ) : null}
-              {chaldeanResult ? (
+              )}
+              {chaldeanResult && (
                 <View style={styles.resultSection}>
                   <Text style={styles.resultLabel}>Chaldean:</Text>
                   <Text style={styles.resultText}>{chaldeanResult}</Text>
                 </View>
-              ) : null}
-              {isAuthenticated && user && chaldeanResult ? (
+              )}
+              {isAuthenticated && chaldeanResult && (
                 <View style={styles.resultSection}>
                   <Text style={styles.resultLabel}>
                     {isNameFavorite
@@ -270,7 +268,7 @@ export default function NameScreen() {
                     {renderFavoriteIcon()}
                   </Pressable>
                 </View>
-              ) : null}
+              )}
             </View>
           </View>
         </SafeAreaView>
