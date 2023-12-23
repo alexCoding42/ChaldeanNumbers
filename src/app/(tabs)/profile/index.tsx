@@ -82,18 +82,30 @@ export default function ProfileScreen() {
                   List of favorites
                 </Link>
               </View>
-              <View style={styles.menuItem}>
+              {/* Implement feature later */}
+              {/* <View style={styles.menuItem}>
                 <Ionicons name="earth" size={24} color={Colors.text} />
                 <Link href="/profile/language" style={styles.menuItemText}>
                   Language
                 </Link>
-              </View>
+              </View> */}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {}}>
               <View style={styles.menuItem}>
                 <FontAwesome name="book" size={24} color={Colors.text} />
                 <Link href="/profile/source" style={styles.menuItemText}>
                   Source
+                </Link>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {}}>
+              <View style={styles.menuItem}>
+                <FontAwesome name="lock" size={24} color={Colors.text} />
+                <Link
+                  href="/profile/change-password"
+                  style={styles.menuItemText}
+                >
+                  Change password
                 </Link>
               </View>
             </TouchableOpacity>

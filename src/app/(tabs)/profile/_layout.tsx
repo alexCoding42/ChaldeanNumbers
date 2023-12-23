@@ -34,6 +34,12 @@ export default function ProfileStackLayout() {
       />
       <Stack.Screen name="source" options={{ headerTitle: "Source" }} />
       <Stack.Screen
+        name="change-password"
+        options={{
+          headerTitle: "Change your password",
+        }}
+      />
+      <Stack.Screen
         name="favorites"
         options={{ headerTitle: "Your favorites" }}
       />

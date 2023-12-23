@@ -11,36 +11,50 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { router } from "expo-router";
-import { useResetPassword } from "@nhost/react";
+import { useChangePassword, useSignOut, useUserData } from "@nhost/react";
 import { Text, View } from "components/Themed";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import { Colors } from "constants/Colors";
 import { Borders, Spacings } from "constants/Layouts";
 import LinearGradientButton from "components/atoms/LinearGradientButton";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useApolloClient } from "@apollo/client";
 
-export default function ResetPasswordScreen() {
-  const { resetPassword, isLoading } = useResetPassword();
-  const emailInputRef = useRef<TextInput>(null);
-  const [email, setEmail] = useState("");
+export default function ChangePasswordScreen() {
+  const user = useUserData();
+  const { signOut } = useSignOut();
+  const client = useApolloClient();
 
-  async function sendResetPassword() {
-    if (email === "") {
-      Alert.alert("Error", "Please provide an email.");
-      return;
-    }
+  const { changePassword, isLoading } = useChangePassword();
 
+  const newPasswordInputRef = useRef<TextInput>(null);
+  const confirmNewPasswordInputRef = useRef<TextInput>(null);
+
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+  async function handleChangePassword() {
     try {
-      const res = await resetPassword(email);
+      if (!newPassword || !confirmNewPassword) {
+        Alert.alert("Error", "All fields must be filled");
+        return;
+      } else if (newPassword !== confirmNewPassword) {
+        Alert.alert("Error", "Passwords do not match");
+        return;
+      }
+
+      const res = await changePassword(newPassword.trim());
 
       if (res.isError) {
         throw new Error(res?.error?.message);
       } else {
         Alert.alert(
           "Success",
-          "A reset link has been sent. Please check your mailbox and follow the procedure to change your password."
+          "Password has been changed successfully. Please login again into the application."
         );
-        router.replace("/login");
+        signOut();
+        client.resetStore();
+        router.replace("/");
       }
     } catch (error) {
       Alert.alert("Error", (error as Error).message);
@@ -56,32 +70,56 @@ export default function ResetPasswordScreen() {
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <ScrollView>
             <View style={styles.container}>
-              <Text style={styles.textInputTitle}>Email</Text>
+              <Text style={styles.textInputTitle}>New Password</Text>
               <View style={styles.textInputContainer}>
                 <TextInput
-                  ref={emailInputRef}
-                  keyboardType="email-address"
-                  returnKeyType="done"
-                  placeholder="your.email@gmail.com"
+                  ref={newPasswordInputRef}
+                  secureTextEntry
+                  returnKeyType="next"
+                  placeholder="your new password"
                   placeholderTextColor={Colors.tabIconUnselected}
                   autoCapitalize="none"
                   style={styles.input}
-                  value={email}
-                  onChangeText={(value) => setEmail(value)}
-                  onSubmitEditing={sendResetPassword}
+                  value={newPassword}
+                  onChangeText={(value) => setNewPassword(value)}
+                  onSubmitEditing={() =>
+                    confirmNewPasswordInputRef.current?.focus()
+                  }
                   blurOnSubmit={false}
                 />
                 <TouchableOpacity
                   style={styles.clearIcon}
-                  onPress={() => setEmail("")}
+                  onPress={() => setNewPassword("")}
+                >
+                  <MaterialIcons color={Colors.text} name="clear" size={20} />
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.textInputTitle}>Confirm new Password</Text>
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  ref={confirmNewPasswordInputRef}
+                  secureTextEntry
+                  returnKeyType="done"
+                  placeholder="Confirm your new password"
+                  placeholderTextColor={Colors.tabIconUnselected}
+                  autoCapitalize="none"
+                  style={styles.input}
+                  value={confirmNewPassword}
+                  onChangeText={(value) => setConfirmNewPassword(value)}
+                  onSubmitEditing={handleChangePassword}
+                  blurOnSubmit={false}
+                />
+                <TouchableOpacity
+                  style={styles.clearIcon}
+                  onPress={() => setConfirmNewPassword("")}
                 >
                   <MaterialIcons color={Colors.text} name="clear" size={20} />
                 </TouchableOpacity>
               </View>
               <LinearGradientButton
                 style={{ marginTop: 20 }}
-                buttonText="Reset password"
-                onPress={sendResetPassword}
+                buttonText="Change password"
+                onPress={handleChangePassword}
                 isLoading={isLoading}
               />
             </View>
