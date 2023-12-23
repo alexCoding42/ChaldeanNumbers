@@ -68,15 +68,25 @@ function RootLayoutNav() {
             <Stack.Screen name="modal" options={{ presentation: "modal" }} />
             <Stack.Screen name="error" options={{ headerShown: false }} />
             <Stack.Screen
-              name="sign-in"
+              name="login"
               options={{
                 ...DefaultHeaderOptions,
-                headerTitle: "Sign In",
+                headerTitle: "Login to your account",
               }}
             />
             <Stack.Screen
-              name="sign-up"
-              options={{ ...DefaultHeaderOptions, headerTitle: "Sign Up" }}
+              name="register"
+              options={{
+                ...DefaultHeaderOptions,
+                headerTitle: "Create a new account",
+              }}
+            />
+            <Stack.Screen
+              name="reset-password"
+              options={{
+                ...DefaultHeaderOptions,
+                headerTitle: "Reset your password",
+              }}
             />
           </Stack>
         </ThemeProvider>

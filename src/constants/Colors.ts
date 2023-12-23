@@ -5,7 +5,10 @@ export default {
 
 export const Colors = {
   background: ["#341848", "#151146"],
-  black: "#000",
+  black: {
+    default: "#000",
+    withOpacity: "rgba(0, 0, 0, 0.4)",
+  },
   button: ["#f5f072", "#fe9249"],
   header: ["#151146", "#341848"],
   link: "#2e78b7",

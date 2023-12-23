@@ -2,10 +2,10 @@ import React, { createRef, useCallback, useEffect, useState } from "react";
 import {
   Alert,
   Keyboard,
-  Pressable,
   SafeAreaView,
   StyleSheet,
   TextInput,
+  TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
 
@@ -251,9 +251,9 @@ export default function NameScreen() {
                 value={inputName}
                 onChangeText={(value) => setInputName(value)}
               />
-              <Pressable style={styles.clearIcon} onPress={clearField}>
+              <TouchableOpacity style={styles.clearIcon} onPress={clearField}>
                 <MaterialIcons color={Colors.text} name="clear" size={20} />
-              </Pressable>
+              </TouchableOpacity>
             </View>
             <LinearGradientButton
               buttonText="Calculate"
@@ -281,9 +281,12 @@ export default function NameScreen() {
                       ? "Remove this name from favorite:"
                       : "Add this name to favorite:"}
                   </Text>
-                  <Pressable onPress={handleFavorite} style={styles.resultText}>
+                  <TouchableOpacity
+                    onPress={handleFavorite}
+                    style={styles.resultText}
+                  >
                     {renderFavoriteIcon()}
-                  </Pressable>
+                  </TouchableOpacity>
                 </View>
               )}
             </View>
@@ -324,7 +327,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: Borders.RADIUS.BUTTON,
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    backgroundColor: Colors.black.withOpacity,
     color: Colors.text,
     fontWeight: "500",
     borderRadius: Borders.RADIUS.BUTTON,
@@ -332,7 +335,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacings.SM,
     alignItems: "center",
     elevation: 12,
-    shadowColor: Colors.black,
+    shadowColor: Colors.black.default,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 10,

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { router } from "expo-router";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
@@ -18,21 +18,21 @@ const NotAuthenticatedScreen = () => {
         </Text>
         <LinearGradientButton
           style={styles.button}
-          buttonText="Sign in"
-          onPress={() => router.push("/sign-in")}
+          buttonText="Login"
+          onPress={() => router.push("/login")}
         />
         <OutlineButton
           style={styles.button}
           buttonText="Create a new account"
-          onPress={() => router.push("/sign-up")}
+          onPress={() => router.push("/register")}
         />
         <Divider />
-        <Pressable
+        <TouchableOpacity
           style={styles.touchable}
           onPress={() => router.push("/profile/privacy-policy")}
         >
           <Text style={styles.text}>Privacy Policy</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </LinearGradientBackground>
   );

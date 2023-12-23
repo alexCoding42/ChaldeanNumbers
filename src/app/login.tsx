@@ -21,7 +21,7 @@ import LinearGradientButton from "components/atoms/LinearGradientButton";
 import { router } from "expo-router";
 import { Borders, Spacings } from "constants/Layouts";
 
-export default function SignInScreen() {
+export default function LoginScreen() {
   const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
 
@@ -31,7 +31,7 @@ export default function SignInScreen() {
   const { signInEmailPassword, isLoading } = useSignInEmailPassword();
   const { auth } = useNhostClient();
 
-  const handleLogin = async () => {
+  const login = async () => {
     if (!email || !password) {
       Alert.alert("Error", "All fields must be filled");
       return;
@@ -42,7 +42,7 @@ export default function SignInScreen() {
       if (res.needsEmailVerification) {
         Alert.alert(
           "Error",
-          "Your account is not verified. Please check your mailbox and follow the verification link to verify your email. If you did not receive any email, or if the link has expired you can ask for a new confirmation link.",
+          "Your account is not verified. Please check your mailbox (and spam) and follow the verification procedure to verify your email. If you did not receive any email, or if the link has expired you can ask for a new confirmation link.",
           [
             {
               text: "Ask for a new confirmation link",
@@ -70,7 +70,7 @@ export default function SignInScreen() {
       if (!res.error) {
         Alert.alert(
           "Success",
-          "A new confirmation link has been sent, please check your email."
+          "A new confirmation link has been sent, please check your email and make sure to check your spam inbox as well to follow the procedure."
         );
         return;
       } else {
@@ -125,7 +125,7 @@ export default function SignInScreen() {
                   style={styles.input}
                   value={password}
                   onChangeText={(value) => setPassword(value)}
-                  onSubmitEditing={handleLogin}
+                  onSubmitEditing={login}
                   blurOnSubmit={false}
                 />
                 <TouchableOpacity
@@ -138,16 +138,16 @@ export default function SignInScreen() {
               <LinearGradientButton
                 style={{ marginTop: 20 }}
                 buttonText="Login"
-                onPress={handleLogin}
+                onPress={login}
                 isLoading={isLoading}
               />
-              <TouchableOpacity onPress={() => router.push("/sign-up")}>
+              <TouchableOpacity onPress={() => router.push("/register")}>
                 <Text style={styles.signUpText}>
                   Don't have an account yet?{" "}
-                  <Text style={styles.signUpTextColored}>Sign Up</Text> now
+                  <Text style={styles.signUpTextColored}>Register</Text> now
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => router.push("/forgot-password")}>
+              <TouchableOpacity onPress={() => router.push("/reset-password")}>
                 <Text style={styles.forgotPasswordText}>
                   I have forgotten my password
                 </Text>
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: Borders.RADIUS.BUTTON,
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.black.default,
     color: Colors.text,
     fontWeight: "500",
     borderRadius: Borders.RADIUS.BUTTON,
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacings.SM,
     alignItems: "center",
     elevation: 12,
-    shadowColor: Colors.black,
+    shadowColor: Colors.black.default,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 10,
