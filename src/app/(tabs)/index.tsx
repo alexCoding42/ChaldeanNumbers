@@ -163,10 +163,12 @@ export default function NameScreen() {
 
   const addFavorite = async () => {
     try {
+      console.log("chaldeanNumber", chaldeanResult);
       const res = await insertFavorite({
         variables: {
           type: "name",
           value: inputName.trim().toLowerCase(),
+          chaldeanNumber: chaldeanResult,
           userId: user?.id,
         },
       });

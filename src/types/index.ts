@@ -19,6 +19,7 @@ export interface IFavorite {
   id: string;
   type: string;
   value: string;
+  chaldeanNumber: number;
   userId: string;
 }
 

@@ -33,11 +33,19 @@ export default function FavoritesScreen() {
   const getFavoriteCount = (type: string) =>
     data?.favorites.filter((fav: IFavorite) => fav.type === type).length ?? 0;
 
-  const renderFavoriteItem = ({ item }: { item: IFavorite }) => (
-    <View style={styles.itemContainer}>
-      <Text style={styles.itemValue}>{item.value}</Text>
-    </View>
-  );
+  const renderFavoriteItem = ({ item }: { item: IFavorite }) => {
+    const isName = item.type === "name";
+    const formattedType = isName ? "Name" : "Date";
+
+    return (
+      <View style={styles.itemContainer}>
+        <Text style={styles.itemValue}>
+          {formattedType}: {item.value}
+        </Text>
+        <Text style={styles.itemValue}> / Number: {item.chaldeanNumber}</Text>
+      </View>
+    );
+  };
 
   const pluralizeType = (category: string): string => {
     const singularType = category.endsWith("s")
@@ -120,6 +128,7 @@ const styles = StyleSheet.create({
     color: Colors.text,
   },
   itemContainer: {
+    flexDirection: "row",
     padding: Spacings.XS,
   },
   itemValue: {

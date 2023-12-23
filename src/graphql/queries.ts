@@ -16,20 +16,34 @@ export const GET_FAVORITES = gql`
       id
       type
       value
+      chaldeanNumber
       userId
     }
   }
 `;
 
 export const ADD_FAVORITE = gql`
-  mutation ($type: String!, $value: String!, $userId: uuid!) {
+  mutation (
+    $type: String!
+    $value: String!
+    $chaldeanNumber: Int!
+    $userId: uuid!
+  ) {
     insert_favorites(
-      objects: [{ type: $type, value: $value, userId: $userId }]
+      objects: [
+        {
+          type: $type
+          value: $value
+          chaldeanNumber: $chaldeanNumber
+          userId: $userId
+        }
+      ]
     ) {
       returning {
         id
         type
         value
+        chaldeanNumber
         userId
       }
     }
