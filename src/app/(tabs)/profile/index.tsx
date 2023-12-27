@@ -5,15 +5,22 @@ import { Text, View } from "components/Themed";
 import { Colors } from "constants/Colors";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import { Spacings } from "constants/Layouts";
-import { useSignOut, useUserData } from "@nhost/react";
+import { useAuthenticationStatus, useSignOut, useUserData } from "@nhost/react";
 import { useApolloClient, useMutation } from "@apollo/client";
-import { DELETE_USER } from "graphql/queries";
+import { DELETE_FAVORITES_BY_USER_ID, DELETE_USER } from "graphql/queries";
 import LoadingSpinner from "components/atoms/LoadingSpinner";
 
 export default function ProfileScreen() {
   const user = useUserData();
+  const { isAuthenticated, isLoading } = useAuthenticationStatus();
   const { signOut } = useSignOut();
   const client = useApolloClient();
+
+  const [deleteUserFavorites] = useMutation(DELETE_FAVORITES_BY_USER_ID, {
+    variables: {
+      userId: user?.id || "",
+    },
+  });
 
   const [deleteUser] = useMutation(DELETE_USER, {
     variables: {
@@ -23,10 +30,21 @@ export default function ProfileScreen() {
 
   const confirmDeleteUser = async () => {
     try {
-      const res = await deleteUser();
-      if (res.data.deleteUser.id) {
-        logout();
+      const resDeleteFavs = await deleteUserFavorites();
+      if (
+        resDeleteFavs.data.delete_favorites.affected_rows >= 0 &&
+        resDeleteFavs.data.delete_favorites.returning.length >= 0
+      ) {
+        const res = await deleteUser();
+        if (res.data.deleteUser.id) {
+          logout();
+        } else {
+          throw new Error();
+        }
+      } else {
+        throw new Error();
       }
+      Alert.alert("Success", "User has been deleted successfully.");
     } catch (error) {
       Alert.alert(
         "Error",
@@ -62,15 +80,15 @@ export default function ProfileScreen() {
 
   return (
     <LinearGradientBackground>
-      {!user ? (
+      {(!user && !isAuthenticated) || isLoading ? (
         <LoadingSpinner />
       ) : (
         <View style={styles.container}>
           <View style={styles.userInfoSection}>
-            <Text style={styles.username}>{user.displayName}</Text>
+            <Text style={styles.username}>{user?.displayName}</Text>
             <View style={styles.row}>
               <MaterialIcons name="email" size={20} color={Colors.text} />
-              <Text style={styles.sectionText}>{user.email}</Text>
+              <Text style={styles.sectionText}>{user?.email}</Text>
             </View>
           </View>
 

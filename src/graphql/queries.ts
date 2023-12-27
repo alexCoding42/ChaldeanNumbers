@@ -61,3 +61,17 @@ export const DELETE_FAVORITE = gql`
     }
   }
 `;
+
+export const DELETE_FAVORITES_BY_USER_ID = gql`
+  mutation ($userId: uuid!) {
+    delete_favorites(where: { userId: { _eq: $userId } }) {
+      affected_rows
+      returning {
+        id
+        chaldeanNumber
+        type
+        value
+      }
+    }
+  }
+`;

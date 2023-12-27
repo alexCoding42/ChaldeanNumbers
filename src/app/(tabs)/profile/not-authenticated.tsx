@@ -29,6 +29,12 @@ const NotAuthenticatedScreen = () => {
         <Divider />
         <TouchableOpacity
           style={styles.touchable}
+          onPress={() => router.push("/profile/source")}
+        >
+          <Text style={styles.text}>Source</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.touchable}
           onPress={() => router.push("/profile/privacy-policy")}
         >
           <Text style={styles.text}>Privacy Policy</Text>
