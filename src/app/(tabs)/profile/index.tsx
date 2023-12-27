@@ -38,7 +38,7 @@ export default function ProfileScreen() {
   const deleteAccount = () => {
     Alert.alert(
       "Warning",
-      "You are about to delete your account, this action is permanent you wont be able to retrieve your account and profile settings later. Are you sure you want to do this?",
+      "You are about to delete your account, this action is permanent you won't be able to retrieve your account and profile settings later. Are you sure you want to do this?",
       [
         {
           text: "Cancel",

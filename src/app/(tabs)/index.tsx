@@ -25,7 +25,7 @@ import { Borders, Spacings } from "constants/Layouts";
 
 export default function NameScreen() {
   const validName = "^[a-zA-Z0-9\\s]+$";
-  const inputDateRef = createRef<TextInput>();
+  const inputNameRef = createRef<TextInput>();
 
   const { isAuthenticated } = useAuthenticationStatus();
   const user = useUserData();
@@ -71,7 +71,7 @@ export default function NameScreen() {
   }, [isAuthenticated, inputName]);
 
   const clearField = () => {
-    inputDateRef?.current?.clear();
+    inputNameRef?.current?.clear();
     setInputName("");
     setFirstSubNumber(null);
     setChaldeanResult(null);
@@ -244,7 +244,7 @@ export default function NameScreen() {
             <View style={styles.textInputContainer}>
               <TextInput
                 testID="nameTextInput"
-                ref={inputDateRef}
+                ref={inputNameRef}
                 placeholder="Ex: Bernard Hackwell"
                 placeholderTextColor={Colors.placeholder}
                 autoCapitalize="none"
