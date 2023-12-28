@@ -1,6 +1,6 @@
 # Chaldean Numbers
 
-![chaldean-numbers](https://user-images.githubusercontent.com/56698920/211189876-d77bfe8d-9630-4cc4-a2d2-7b169495cd7e.png)
+![chaldean-numbers](https://github.com/alexCoding42/ChaldeanNumbers/assets/56698920/7bff6c42-46a5-40a8-acef-a47356995104)
 
 > 📲 [Available on Play Store](https://play.google.com/store/apps/details?id=com.alex_dev.chaldeannumbers&pli=1)
 
