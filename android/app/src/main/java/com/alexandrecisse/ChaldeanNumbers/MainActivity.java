@@ -1,4 +1,4 @@
-package com.alex_dev.ChaldeanNumbers;
+package com.alexandrecisse.ChaldeanNumbers;
 
 import android.os.Build;
 import android.os.Bundle;

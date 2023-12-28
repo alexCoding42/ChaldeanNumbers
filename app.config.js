@@ -20,14 +20,14 @@ export default {
     assetBundlePatterns: ["**/*"],
     ios: {
       supportsTablet: true,
-      bundleIdentifier: "com.alexandrecisse.chaldean-numbers",
+      bundleIdentifier: "com.alexandrecisse.ChaldeanNumbers",
     },
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#ffffff",
       },
-      package: "com.alex_dev.ChaldeanNumbers",
+      package: "com.alexandrecisse.ChaldeanNumbers",
     },
     web: {
       bundler: "metro",
