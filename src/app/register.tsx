@@ -227,11 +227,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: Spacings.SM,
     alignItems: "center",
-    elevation: 12,
-    shadowColor: Colors.black.default,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
   },
   clearIcon: {
     position: "absolute",
