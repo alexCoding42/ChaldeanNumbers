@@ -155,7 +155,7 @@ export default function NameScreen() {
         {
           type: "success",
           message: "Favorite added",
-          color: Colors.yellow.success,
+          color: Colors.green,
         },
       ]);
     }

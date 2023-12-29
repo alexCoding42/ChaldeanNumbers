@@ -1,6 +1,5 @@
 import React, { createRef, useState } from "react";
 import {
-  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -10,6 +9,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
+import Toast from "react-native-root-toast";
 import { Text, View } from "components/Themed";
 import { Borders, Spacings } from "constants/Layouts";
 import { Colors } from "constants/Colors";
@@ -35,27 +35,43 @@ export default function RegisterScreen() {
   const register = async () => {
     try {
       if (!username || !email || !password || !confirmPassword) {
-        Alert.alert("Error", "All fields must be filled");
+        Toast.show(`Error cannot register.\nAll fields must be filled.`, {
+          duration: Toast.durations.LONG,
+          backgroundColor: Colors.red,
+        });
         return;
       } else if (password !== confirmPassword) {
-        Alert.alert("Error", "Passwords do not match");
+        Toast.show(`Error cannot register.\nPassword do not match.`, {
+          duration: Toast.durations.LONG,
+          backgroundColor: Colors.red,
+        });
         return;
       }
-      const res = await signUpEmailPassword(email.trim(), password.trim(), {
-        displayName: username.trim(),
-        allowedRoles: ["user"],
-      });
-      if (res.isError) {
-        throw new Error(res?.error?.message);
-      } else {
-        Alert.alert(
-          "Success",
-          "Your account has been created successfully but needs to be verified. Please check your mailbox (and spam) and follow the verification procedure to verify your email."
+      const { isError, error } = await signUpEmailPassword(
+        email.trim(),
+        password.trim(),
+        {
+          displayName: username.trim(),
+          allowedRoles: ["user"],
+        }
+      );
+      if (isError) {
+        throw new Error(error?.message);
+      } else if (!isError && !error) {
+        Toast.show(
+          `Successfully registered.\nYour account has been created but needs to be verified. Please check your mailbox (and spam) and follow the verification procedure to verify your email.`,
+          {
+            duration: 8000,
+            backgroundColor: Colors.green,
+          }
         );
-        router.push("/login");
+        router.replace("/login");
       }
     } catch (error) {
-      Alert.alert("Error", (error as Error).message);
+      Toast.show(`Error cannot register.\n${(error as Error).message}`, {
+        duration: Toast.durations.LONG,
+        backgroundColor: Colors.red,
+      });
     }
   };
 

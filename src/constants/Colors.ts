@@ -10,6 +10,7 @@ export const Colors = {
     withOpacity: "rgba(0, 0, 0, 0.4)",
   },
   button: ["#f5f072", "#fe9249"],
+  green: "#4BB543",
   header: ["#151146", "#341848"],
   link: "#2e78b7",
   placeholder: "#737373",
@@ -25,7 +26,6 @@ export const Colors = {
   yellow: {
     light: "#f5f072",
     dark: "#fe9249",
-    success: "#4BB543",
   },
 };
 

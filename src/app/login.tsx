@@ -14,6 +14,7 @@ import {
 } from "react-native";
 
 import { useNhostClient, useSignInEmailPassword } from "@nhost/react";
+import Toast from "react-native-root-toast";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "constants/Colors";
@@ -33,15 +34,19 @@ export default function LoginScreen() {
 
   const login = async () => {
     if (!email || !password) {
-      Alert.alert("Error", "All fields must be filled");
+      Toast.show(`Error cannot register.\nAll fields must be filled.`, {
+        duration: Toast.durations.LONG,
+        backgroundColor: Colors.red,
+      });
       return;
     }
 
     try {
-      const res = await signInEmailPassword(email.trim(), password.trim());
-      if (res.needsEmailVerification) {
+      const { isError, isSuccess, error, needsEmailVerification } =
+        await signInEmailPassword(email.trim(), password.trim());
+      if (needsEmailVerification) {
         Alert.alert(
-          "Error",
+          "Error cannot login.",
           "Your account is not verified. Please check your mailbox (and spam) and follow the verification procedure to verify your email. If you did not receive any email, or if the link has expired you can ask for a new confirmation link.",
           [
             {
@@ -52,29 +57,34 @@ export default function LoginScreen() {
           ]
         );
         return;
-      } else if (res.isError) {
-        throw new Error(res?.error?.message);
-      } else if (res.isSuccess) {
+      } else if (isError) {
+        throw new Error(error?.message);
+      } else if (isSuccess) {
         router.replace("/(tabs)");
       }
     } catch (error) {
-      Alert.alert("Error", (error as Error).message);
+      Toast.show(`Error cannot login.\n${(error as Error).message}`, {
+        duration: Toast.durations.LONG,
+        backgroundColor: Colors.red,
+      });
     }
   };
 
   const sendNewConfirmationLink = async () => {
     try {
-      const res = await auth.sendVerificationEmail({
+      const { error } = await auth.sendVerificationEmail({
         email: email,
       });
-      if (!res.error) {
-        Alert.alert(
-          "Success",
-          "A new confirmation link has been sent, please check your email and make sure to check your spam inbox as well to follow the procedure."
+      if (error) {
+        throw new Error(error?.message);
+      } else if (!error) {
+        Toast.show(
+          "A new confirmation link has been sent, please check your email and make sure to check your spam inbox as well to follow the procedure.",
+          {
+            duration: 5000,
+            backgroundColor: Colors.green,
+          }
         );
-        return;
-      } else {
-        throw new Error(res?.error?.message);
       }
     } catch (error) {
       Alert.alert("Error", (error as Error).message);

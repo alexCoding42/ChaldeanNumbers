@@ -143,7 +143,7 @@ export default function DateScreen() {
         {
           type: "success",
           message: "Favorite added",
-          color: Colors.yellow.success,
+          color: Colors.green,
         },
       ]);
     }
