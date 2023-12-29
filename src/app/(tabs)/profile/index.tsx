@@ -6,21 +6,25 @@ import { Colors } from "constants/Colors";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import { Spacings } from "constants/Layouts";
 import { useAuthenticationStatus, useSignOut, useUserData } from "@nhost/react";
-import { useApolloClient, useMutation } from "@apollo/client";
-import { DELETE_FAVORITES_BY_USER_ID, DELETE_USER } from "graphql/queries";
+import { gql, useApolloClient, useMutation } from "@apollo/client";
 import LoadingSpinner from "components/atoms/LoadingSpinner";
+import Toast from "react-native-root-toast";
+
+const DELETE_USER = gql`
+  mutation DeleteUser($id: uuid!) {
+    deleteUser(id: $id) {
+      id
+      displayName
+      email
+    }
+  }
+`;
 
 export default function ProfileScreen() {
   const user = useUserData();
   const { isAuthenticated, isLoading } = useAuthenticationStatus();
   const { signOut } = useSignOut();
   const client = useApolloClient();
-
-  const [deleteUserFavorites] = useMutation(DELETE_FAVORITES_BY_USER_ID, {
-    variables: {
-      userId: user?.id || "",
-    },
-  });
 
   const [deleteUser] = useMutation(DELETE_USER, {
     variables: {
@@ -30,33 +34,28 @@ export default function ProfileScreen() {
 
   const confirmDeleteUser = async () => {
     try {
-      const resDeleteFavs = await deleteUserFavorites();
-      if (
-        resDeleteFavs.data.delete_favorites.affected_rows >= 0 &&
-        resDeleteFavs.data.delete_favorites.returning.length >= 0
-      ) {
-        const res = await deleteUser();
-        if (res.data.deleteUser.id) {
-          logout();
-        } else {
-          throw new Error();
-        }
+      const res = await deleteUser();
+      if (res.data.deleteUser.id) {
+        logout();
       } else {
         throw new Error();
       }
-      Alert.alert("Success", "User has been deleted successfully.");
+      Toast.show("User has been deleted successfully", {
+        duration: Toast.durations.LONG,
+        backgroundColor: Colors.green,
+      });
     } catch (error) {
-      Alert.alert(
-        "Error",
-        "An error has occurred. Please try again or contact the support."
-      );
+      Toast.show("Error when deleting user", {
+        duration: Toast.durations.LONG,
+        backgroundColor: Colors.red,
+      });
     }
   };
 
   const deleteAccount = () => {
     Alert.alert(
-      "Warning",
-      "You are about to delete your account, this action is permanent you won't be able to retrieve your account and profile settings later. Are you sure you want to do this?",
+      "Caution",
+      "You are about to delete your account, this action is permanent you won't be able to retrieve your account and any data related to it. Are you sure you want to do this?",
       [
         {
           text: "Cancel",
@@ -75,7 +74,7 @@ export default function ProfileScreen() {
   const logout = () => {
     signOut();
     client.resetStore();
-    router.replace("/");
+    router.replace("/profile/not-authenticated");
   };
 
   return (
