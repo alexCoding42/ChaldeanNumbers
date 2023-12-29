@@ -5,12 +5,29 @@ import { Text, View } from "components/Themed";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import { Colors } from "constants/Colors";
 import { Spacings } from "constants/Layouts";
-import { useQuery } from "@apollo/client";
-import { getNumberDetailsById } from "./queries";
+import { gql, useQuery } from "@apollo/client";
 import LoadingSpinner from "components/atoms/LoadingSpinner";
 import { IChaldeanNumber } from "types";
+import Toast from "react-native-root-toast";
 
 type Content = keyof IChaldeanNumber;
+
+const getNumberDetailsById = gql`
+  query ($id: uuid) {
+    numbers(where: { id: { _eq: $id } }) {
+      id
+      locale
+      chaldean
+      challenge
+      description
+      name
+      lifepath
+      phrase_description
+      phrase_title
+      words
+    }
+  }
+`;
 
 export default function NumberDetailsScreen() {
   let item: IChaldeanNumber | null = null;
@@ -24,9 +41,14 @@ export default function NumberDetailsScreen() {
     router.replace({
       pathname: `/error`,
       params: {
-        errorTitle: "Cannot get data from database",
-        errorMessage: "Try again or contact the support.",
+        errorTitle: "Cannot get data from database.",
+        errorMessage: "Please try again or contact the support.",
       },
+    });
+
+    Toast.show("Database error", {
+      duration: Toast.durations.LONG,
+      backgroundColor: Colors.red,
     });
     return null;
   }
