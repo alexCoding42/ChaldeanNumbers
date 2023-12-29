@@ -1,6 +1,5 @@
 import React, { createRef, useCallback, useEffect, useState } from "react";
 import {
-  Alert,
   Keyboard,
   SafeAreaView,
   StyleSheet,
@@ -8,20 +7,19 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
-
+import Toast from "react-native-root-toast";
+import { useAuthenticationStatus, useUserData } from "@nhost/react";
+import { useMutation, useQuery } from "@apollo/client";
+import { MaterialIcons } from "@expo/vector-icons";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import { Text, View } from "components/Themed";
-import { MaterialIcons } from "@expo/vector-icons";
-import { useMutation, useQuery } from "@apollo/client";
 import { ADD_FAVORITE, DELETE_FAVORITE, GET_FAVORITES } from "graphql/queries";
 import { CHALDEAN_NUMBERS } from "constants/Numbers";
 import { getArrayOfNumbersFromSplittedName, getTotal } from "utils/computation";
-import { useAuthenticationStatus, useUserData } from "@nhost/react";
-import { IFavorite, IToast } from "types";
 import LinearGradientButton from "components/atoms/LinearGradientButton";
-import Toast from "components/atoms/Toast";
 import { Colors } from "constants/Colors";
 import { Borders, Spacings } from "constants/Layouts";
+import { IFavorite } from "types";
 
 export default function NameScreen() {
   const validName = "^[a-zA-Z0-9\\s]+$";
@@ -38,7 +36,6 @@ export default function NameScreen() {
     false
   );
   const [nameFavoriteId, setNameFavoriteId] = useState("");
-  const [toasts, setToasts] = useState<IToast[]>([]);
 
   const { data: favoritesData, loading: isfetchingFavorites } = useQuery(
     GET_FAVORITES,
@@ -47,7 +44,6 @@ export default function NameScreen() {
       variables: {
         userId: isAuthenticated ? user?.id : "",
       },
-      fetchPolicy: "network-only",
     }
   );
 
@@ -63,7 +59,10 @@ export default function NameScreen() {
           setNameFavoriteId(favoriteData?.nameFavoriteId);
         }
       } catch (error) {
-        console.warn("Error", error);
+        Toast.show("Error when fetching favorites", {
+          duration: Toast.durations.LONG,
+          backgroundColor: Colors.red,
+        });
       }
     };
 
@@ -83,24 +82,17 @@ export default function NameScreen() {
     const name = inputName.trim();
 
     if (name === "") {
-      return;
+      return null;
     } else if (!name.match(validName)) {
-      Alert.alert("Warning", "Name can only contain letter and number");
-      return;
+      Toast.show("Name can only contain letter and number", {
+        duration: Toast.durations.LONG,
+        backgroundColor: Colors.red,
+      });
+      return null;
     }
 
     Keyboard.dismiss();
     setIsButtonLoading(true);
-
-    try {
-      if (isAuthenticated) {
-        const favoriteData = await checkIfNameIsFavorite();
-        setIsNameFavorite(favoriteData?.isNameFavorite);
-        setNameFavoriteId(favoriteData?.nameFavoriteId);
-      }
-    } catch (error) {
-      console.warn("Error", error);
-    }
 
     setTimeout(() => {
       const arrayOfNumbersFromName = splitNameAndReturnArrayOfNumbers(name);
@@ -140,24 +132,8 @@ export default function NameScreen() {
   const handleFavorite = async () => {
     if (isNameFavorite) {
       deleteFavorite();
-      setToasts([
-        ...toasts,
-        {
-          type: "danger",
-          message: "Favorite removed",
-          color: Colors.red,
-        },
-      ]);
     } else {
       addFavorite();
-      setToasts([
-        ...toasts,
-        {
-          type: "success",
-          message: "Favorite added",
-          color: Colors.green,
-        },
-      ]);
     }
   };
 
@@ -171,24 +147,47 @@ export default function NameScreen() {
           userId: user?.id,
         },
       });
-      setIsNameFavorite(true);
-      setNameFavoriteId(res.data.insert_favorites.returning[0].id);
+
+      if (res.data.insert_favorites_one.userId === user?.id) {
+        setIsNameFavorite(true);
+        setNameFavoriteId(res.data.insert_favorites_one.id);
+        Toast.show("Favorite added", {
+          duration: Toast.durations.LONG,
+          backgroundColor: Colors.green,
+        });
+      } else {
+        throw new Error();
+      }
     } catch (error) {
-      console.error(error);
+      Toast.show("Error when adding favorite", {
+        duration: Toast.durations.LONG,
+        backgroundColor: Colors.red,
+      });
     }
   };
 
   const deleteFavorite = async () => {
     try {
-      await removeFavorite({
+      const res = await removeFavorite({
         variables: {
           id: nameFavoriteId,
         },
       });
-      setIsNameFavorite(false);
-      setNameFavoriteId("");
+      if (res.data.delete_favorites_by_pk.id === nameFavoriteId) {
+        setIsNameFavorite(false);
+        setNameFavoriteId("");
+        Toast.show("Favorite removed", {
+          duration: Toast.durations.LONG,
+          backgroundColor: Colors.red,
+        });
+      } else {
+        throw new Error();
+      }
     } catch (error) {
-      console.error(error);
+      Toast.show("Error when deleting favorite", {
+        duration: Toast.durations.LONG,
+        backgroundColor: Colors.red,
+      });
     }
   };
 
@@ -208,21 +207,6 @@ export default function NameScreen() {
     }
   };
 
-  const handleToast = () => {
-    return toasts.map((toast, index) => (
-      <Toast
-        key={index}
-        message={toast.message}
-        color={toast.color}
-        onHide={() => {
-          setToasts((toasts) =>
-            toasts.filter((currentToast) => currentToast !== toast)
-          );
-        }}
-      />
-    ));
-  };
-
   const renderFavoriteIcon = useCallback(() => {
     return (
       <MaterialIcons
@@ -237,7 +221,6 @@ export default function NameScreen() {
     <LinearGradientBackground>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <SafeAreaView style={styles.safeAreaViewContainer}>
-          {handleToast()}
           <View style={styles.container}>
             <Text style={styles.title}>Find the chaldean number of a name</Text>
             <Text style={styles.textInputTitle}>Full Name</Text>

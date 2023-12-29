@@ -18,10 +18,10 @@ import { useAuthenticationStatus, useUserData } from "@nhost/react";
 import { IFavorite, IToast } from "types";
 import { ADD_FAVORITE, DELETE_FAVORITE, GET_FAVORITES } from "graphql/queries";
 import { CHALDEAN_NUMBERS } from "constants/Numbers";
-import Toast from "components/atoms/Toast";
 import { getTotal } from "utils/computation";
 import LinearGradientButton from "components/atoms/LinearGradientButton";
 import DatePicker from "react-native-date-picker";
+import Toast from "react-native-root-toast";
 
 export default function DateScreen() {
   const { isAuthenticated } = useAuthenticationStatus();
@@ -48,7 +48,6 @@ export default function DateScreen() {
       variables: {
         userId: isAuthenticated ? user?.id : "",
       },
-      fetchPolicy: "network-only",
     }
   );
 
@@ -64,7 +63,10 @@ export default function DateScreen() {
           setDateFavoriteId(favoriteData?.dateFavoriteId);
         }
       } catch (error) {
-        console.warn("Error", error);
+        Toast.show("Error when fetching favorites", {
+          duration: Toast.durations.LONG,
+          backgroundColor: Colors.red,
+        });
       }
     };
 
@@ -81,16 +83,6 @@ export default function DateScreen() {
 
     Keyboard.dismiss();
     setIsButtonLoading(true);
-
-    try {
-      if (isAuthenticated) {
-        const favoriteData = await checkIfDateIsFavorite();
-        setIsDateFavorite(favoriteData?.isDateFavorite);
-        setDateFavoriteId(favoriteData?.dateFavoriteId);
-      }
-    } catch (error) {
-      console.warn("Error", error);
-    }
 
     setTimeout(() => {
       const formattedDate = format(new Date(date), "yyyyMMdd");
@@ -128,24 +120,8 @@ export default function DateScreen() {
   const handleFavorite = async () => {
     if (isDateFavorite) {
       deleteFavorite();
-      setToasts([
-        ...toasts,
-        {
-          type: "danger",
-          message: "Favorite removed",
-          color: Colors.red,
-        },
-      ]);
     } else {
       addFavorite();
-      setToasts([
-        ...toasts,
-        {
-          type: "success",
-          message: "Favorite added",
-          color: Colors.green,
-        },
-      ]);
     }
   };
 
@@ -159,24 +135,48 @@ export default function DateScreen() {
           userId: user?.id,
         },
       });
-      setIsDateFavorite(true);
-      setDateFavoriteId(res.data.insert_favorites.returning[0].id);
+
+      if (res.data.insert_favorites_one.userId === user?.id) {
+        setIsDateFavorite(true);
+        setDateFavoriteId(res.data.insert_favorites_one.id);
+        Toast.show("Favorite added", {
+          duration: Toast.durations.LONG,
+          backgroundColor: Colors.green,
+        });
+      } else {
+        throw new Error();
+      }
     } catch (error) {
-      console.error(error);
+      Toast.show("Error when adding favorite", {
+        duration: Toast.durations.LONG,
+        backgroundColor: Colors.red,
+      });
     }
   };
 
   const deleteFavorite = async () => {
     try {
-      await removeFavorite({
+      const res = await removeFavorite({
         variables: {
           id: dateFavoriteId,
         },
       });
-      setIsDateFavorite(false);
-      setDateFavoriteId("");
+
+      if (res.data.delete_favorites_by_pk.id === dateFavoriteId) {
+        setIsDateFavorite(false);
+        setDateFavoriteId("");
+        Toast.show("Favorite removed", {
+          duration: Toast.durations.LONG,
+          backgroundColor: Colors.red,
+        });
+      } else {
+        throw new Error();
+      }
     } catch (error) {
-      console.error(error);
+      Toast.show("Error when deleting favorite", {
+        duration: Toast.durations.LONG,
+        backgroundColor: Colors.red,
+      });
     }
   };
 
@@ -197,21 +197,6 @@ export default function DateScreen() {
     }
   };
 
-  const handleToast = () => {
-    return toasts.map((toast, index) => (
-      <Toast
-        key={index}
-        message={toast.message}
-        color={toast.color}
-        onHide={() => {
-          setToasts((toasts) =>
-            toasts.filter((currentToast) => currentToast !== toast)
-          );
-        }}
-      />
-    ));
-  };
-
   const renderFavoriteIcon = useCallback(() => {
     return (
       <MaterialIcons
@@ -226,7 +211,6 @@ export default function DateScreen() {
     <LinearGradientBackground>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <SafeAreaView style={styles.safeAreaViewContainer}>
-          {handleToast()}
           <View style={styles.container}>
             <Text style={styles.title}>Find the chaldean number of a date</Text>
             <Text style={styles.textInputTitle}>Full Date</Text>

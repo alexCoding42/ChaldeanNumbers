@@ -29,35 +29,31 @@ export const ADD_FAVORITE = gql`
     $chaldeanNumber: Int!
     $userId: uuid!
   ) {
-    insert_favorites(
-      objects: [
-        {
-          type: $type
-          value: $value
-          chaldeanNumber: $chaldeanNumber
-          userId: $userId
-        }
-      ]
-    ) {
-      returning {
-        id
-        type
-        value
-        chaldeanNumber
-        userId
+    insert_favorites_one(
+      object: {
+        type: $type
+        value: $value
+        chaldeanNumber: $chaldeanNumber
+        userId: $userId
       }
+    ) {
+      id
+      chaldeanNumber
+      type
+      userId
+      value
     }
   }
 `;
 
 export const DELETE_FAVORITE = gql`
   mutation ($id: uuid!) {
-    delete_favorites(where: { id: { _eq: $id } }) {
-      returning {
-        id
-        value
-        type
-      }
+    delete_favorites_by_pk(id: $id) {
+      id
+      chaldeanNumber
+      type
+      userId
+      value
     }
   }
 `;
