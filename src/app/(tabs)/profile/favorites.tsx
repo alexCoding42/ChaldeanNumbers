@@ -1,21 +1,25 @@
 import React from "react";
-import { Alert, FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import { Text, View } from "components/Themed";
-import { useUserData } from "@nhost/react";
+import { useAuthenticationStatus, useUserData } from "@nhost/react";
 import { GET_FAVORITES } from "graphql/queries";
 import { useQuery } from "@apollo/client";
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { IFavorite } from "types";
 import LoadingSpinner from "components/atoms/LoadingSpinner";
 import { LinearGradient } from "expo-linear-gradient";
 import { Colors, Gradients } from "constants/Colors";
 import { Spacings } from "constants/Layouts";
+import Toast from "react-native-root-toast";
 
 export default function FavoritesScreen() {
   const user = useUserData();
+  const { isAuthenticated } = useAuthenticationStatus();
+
   const { data, loading, error, refetch } = useQuery(GET_FAVORITES, {
-    variables: { userId: user?.id },
+    skip: !isAuthenticated,
+    variables: { userId: user?.id || "" },
   });
 
   useFocusEffect(() => {
@@ -23,10 +27,18 @@ export default function FavoritesScreen() {
   });
 
   if (error) {
-    Alert.alert(
-      "Error",
-      "An error occurred while fetching favorites. Please try again or contact the support."
-    );
+    router.replace({
+      pathname: `/error`,
+      params: {
+        errorTitle: "Cannot get favorites from database.",
+        errorMessage: "Please try again or contact the support.",
+      },
+    });
+
+    Toast.show("Database error", {
+      duration: Toast.durations.LONG,
+      backgroundColor: Colors.red,
+    });
     return null;
   }
 

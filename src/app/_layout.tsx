@@ -2,6 +2,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { NhostClient, NhostProvider } from "@nhost/react";
 import { NhostApolloProvider } from "@nhost/react-apollo";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import Storage from "@react-native-async-storage/async-storage";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { useFonts } from "expo-font";
 import Constants from "expo-constants";
@@ -16,6 +17,8 @@ const NHOST_REGION = Constants?.expoConfig?.extra?.nhostRegion;
 const nhost = new NhostClient({
   subdomain: NHOST_SUBDOMAIN,
   region: NHOST_REGION,
+  clientStorageType: "react-native",
+  clientStorage: Storage,
 });
 
 export {
