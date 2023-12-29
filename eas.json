@@ -19,17 +19,5 @@
       "autoIncrement": true
     }
   },
-  "submit": {
-    "production": {
-      "android": {
-        "serviceAccountKeyPath": "./service_account.json",
-        "track": "production"
-      },
-      "ios": {
-        "appleId": "alexandrecisse.dev@gmail.com",
-        "ascAppId": "1662955445",
-        "appleTeamId": "3JC9C32R6U"
-      }
-    }
-  }
+  "submit": {}
 }
