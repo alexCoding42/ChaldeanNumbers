@@ -34,7 +34,7 @@ export default function LoginScreen() {
 
   const login = async () => {
     if (!email || !password) {
-      Toast.show(`Error cannot register.\nAll fields must be filled.`, {
+      Toast.show(`Error cannot login.\nAll fields must be filled.`, {
         duration: Toast.durations.LONG,
         backgroundColor: Colors.red,
       });

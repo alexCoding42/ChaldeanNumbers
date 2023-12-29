@@ -11,7 +11,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { router } from "expo-router";
-import { useChangePassword, useSignOut, useUserData } from "@nhost/react";
+import { useChangePassword, useSignOut } from "@nhost/react";
 import { Text, View } from "components/Themed";
 import LinearGradientBackground from "components/atoms/LinearGradientBackground";
 import { Colors } from "constants/Colors";
@@ -19,9 +19,9 @@ import { Borders, Spacings } from "constants/Layouts";
 import LinearGradientButton from "components/atoms/LinearGradientButton";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useApolloClient } from "@apollo/client";
+import Toast from "react-native-root-toast";
 
 export default function ChangePasswordScreen() {
-  const user = useUserData();
   const { signOut } = useSignOut();
   const client = useApolloClient();
 
@@ -36,28 +36,45 @@ export default function ChangePasswordScreen() {
   async function handleChangePassword() {
     try {
       if (!newPassword || !confirmNewPassword) {
-        Alert.alert("Error", "All fields must be filled");
+        Toast.show(
+          `Error cannot change password.\nAll fields must be filled.`,
+          {
+            duration: Toast.durations.LONG,
+            backgroundColor: Colors.red,
+          }
+        );
         return;
       } else if (newPassword !== confirmNewPassword) {
-        Alert.alert("Error", "Passwords do not match");
+        Toast.show(`Error cannot change password.\nPassword do not match.`, {
+          duration: Toast.durations.LONG,
+          backgroundColor: Colors.red,
+        });
         return;
       }
 
-      const res = await changePassword(newPassword.trim());
+      const { isError, error, isSuccess } = await changePassword(
+        newPassword.trim()
+      );
 
-      if (res.isError) {
-        throw new Error(res?.error?.message);
-      } else {
-        Alert.alert(
-          "Success",
-          "Password has been changed successfully. Please login again into the application."
+      if (isError) {
+        throw new Error(error?.message);
+      } else if (isSuccess) {
+        Toast.show(
+          `Success.\nYour password has been change. Please login again into the application.`,
+          {
+            duration: 4000,
+            backgroundColor: Colors.green,
+          }
         );
         signOut();
         client.resetStore();
-        router.replace("/");
+        router.replace("/login");
       }
     } catch (error) {
-      Alert.alert("Error", (error as Error).message);
+      Toast.show(`Error cannot change password.\n${(error as Error).message}`, {
+        duration: Toast.durations.LONG,
+        backgroundColor: Colors.red,
+      });
     }
   }
 
